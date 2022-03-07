@@ -1,6 +1,6 @@
 <template>
   <div class="form">
-    <v-form ref="form" v-model="valid" lazy-validation>
+    <v-form ref="form" lazy-validation>
       <v-text-field v-model="name" label="Recipe Title"></v-text-field>
 
       <v-text-field v-model="ingredients" label="Ingredients"></v-text-field>
@@ -20,6 +20,27 @@
     </v-form>
   </div>
 </template>
+
+<script>
+export default {
+  name: "RecipeForm",
+  data() {
+    return {
+      name: String,
+      ingredients: Array,
+      preperation: String
+    };
+  },
+  created: function() {
+  this.name = "";
+  this.ingredients = [];
+  this.preperation = "";
+  }
+
+};
+</script>
+
+
 
 <style scoped>
 .form {

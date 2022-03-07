@@ -19,10 +19,10 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="deep-purple lighten-2" text @click="reserve">
+        <v-btn color="deep-purple lighten-2" text>
           Save
         </v-btn>
-        <v-btn color="deep-purple lighten-2" text @click="reserve">
+        <v-btn color="deep-purple lighten-2" text>
           Discard
         </v-btn>
         <v-spacer></v-spacer>
