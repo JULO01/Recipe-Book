@@ -22,7 +22,11 @@
             </v-list-item-content>
             <v-list-item-action>
               <v-btn icon>
-                <v-icon @click="deleteIngredient(ingredient.id)" color="red darken-4">mdi-delete-forever</v-icon>
+                <v-icon
+                  @click="deleteIngredient(ingredient.id)"
+                  color="red darken-4"
+                  >mdi-delete-forever</v-icon
+                >
               </v-btn>
             </v-list-item-action>
           </v-list-item>
@@ -42,16 +46,32 @@
         <v-spacer></v-spacer>
         <v-btn color="success" class="mr-4"> Save </v-btn>
 
-        <v-btn @click="$router.push('/')" color="error" class="mr-4"> Back </v-btn>
+        <v-btn @click="goBack()" color="error" class="mr-4">
+          Back
+        </v-btn>
         <v-spacer></v-spacer>
       </div>
     </v-form>
+
+    <Dialog
+      :text="'Are you sure, that you want to leave?'"
+      :acceptButtonText="'Leave'"
+      :declineButtonText="'Stay here'"
+      :enabled="dialogEnabled"
+      @accepted="$router.push('/')"
+      @declined="dialogEnabled = false"
+    />
   </div>
 </template>
 
 <script>
+import Dialog from "..//components/Dialog.vue";
+
 export default {
   name: "RecipeForm",
+  components: {
+    Dialog,
+  },
   data() {
     return {
       name: String,
@@ -59,6 +79,7 @@ export default {
       preperation: String,
       ingredients: Array,
       ingredientId: Number,
+      dialogEnabled: Boolean,
     };
   },
   created: function () {
@@ -67,10 +88,11 @@ export default {
     this.preperation = "";
     this.ingredients = [];
     this.ingredientId = 1;
+    this.dialogEnabled = false;
   },
   methods: {
     addIngredient(ingredientName) {
-      if(ingredientName === ""){
+      if (ingredientName === "") {
         return;
       }
 
@@ -80,13 +102,24 @@ export default {
       this.ingredient = "";
     },
     deleteIngredient(id) {
-      this.ingredients = this.ingredients.filter((ingredient)=>{
+      this.ingredients = this.ingredients.filter((ingredient) => {
         return ingredient.id !== id;
-      })
+      });
     },
-    saveIngredient(ingredient){
-      // Push ingredient to firebase
+    saveRecipe(recipe) {
+      // Push recipe to firebase
       return;
+    },
+    goBack(){
+      // Need to bind and check the attached picture in if statement
+      if(this.ingredients.length == 0 && this.name == "" && this.preperation == ""){
+        this.$router.push('/');
+      }
+      else{
+        console.log("isenabled");
+        this.dialogEnabled = true;
+        console.log(this.dialogEnabled);
+      }
     }
   },
 };
