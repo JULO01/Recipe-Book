@@ -1,13 +1,19 @@
 <template>
   <div class="form">
     <v-form ref="form" lazy-validation>
-      <v-text-field v-model="name" label="Recipe Title"></v-text-field>
+      <v-text-field
+        v-model="name"
+        label="Recipe Title"
+        @keydown.enter.prevent="$nextTick(() => $refs.ingredientInput.focus())"
+      ></v-text-field>
 
       <v-text-field
         @click:append="addIngredient(ingredient)"
+        @keydown.enter.prevent="addIngredient(ingredient)"
         v-model="ingredient"
         label="Ingredients"
         append-icon="mdi-plus"
+        ref="ingredientInput"
       ></v-text-field>
       <!-- v-list is a dummy, it will get dynamic by putting a v-for with this.ingredients in it -->
       <v-list>
@@ -34,27 +40,30 @@
         </div>
       </v-list>
 
-      <v-textarea v-model="preperation" label="Preperation"></v-textarea>
+      <v-textarea
+        v-model="preperation"
+        label="Preperation"
+        ref="preperationInput"
+        @keydown.enter.prevent="$refs.fileInput.focus()"
+      ></v-textarea>
 
       <v-file-input
         truncate-length="15"
         accept="image/*"
         label="Add picture"
+        ref="fileInput"
       ></v-file-input>
 
       <div class="buttons">
         <v-spacer></v-spacer>
         <v-btn color="success" class="mr-4"> Save </v-btn>
-
-        <v-btn @click="goBack()" color="error" class="mr-4">
-          Back
-        </v-btn>
+        <v-btn @click="goBack()" color="error" class="mr-4"> Back </v-btn>
         <v-spacer></v-spacer>
       </div>
     </v-form>
 
     <Dialog
-      :text="'Are you sure, that you want to leave?'"
+      :text="'Are you sure that you want to leave?'"
       :acceptButtonText="'Leave'"
       :declineButtonText="'Stay here'"
       :enabled="dialogEnabled"
@@ -110,17 +119,20 @@ export default {
       // Push recipe to firebase
       return;
     },
-    goBack(){
+    goBack() {
       // Need to bind and check the attached picture in if statement
-      if(this.ingredients.length == 0 && this.name == "" && this.preperation == ""){
-        this.$router.push('/');
-      }
-      else{
+      if (
+        this.ingredients.length == 0 &&
+        this.name == "" &&
+        this.preperation == ""
+      ) {
+        this.$router.push("/");
+      } else {
         console.log("isenabled");
         this.dialogEnabled = true;
         console.log(this.dialogEnabled);
       }
-    }
+    },
   },
 };
 </script>

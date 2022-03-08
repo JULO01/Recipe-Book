@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialogEnabled">
     <v-card>
-      <v-card-title class="text-h5">
+      <v-card-title class="text-h6">
         {{text}}
       </v-card-title>
       <v-card-actions> 
