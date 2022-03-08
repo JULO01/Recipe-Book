@@ -19,7 +19,7 @@
       <v-list>
         <div
           class="listItem"
-          v-for="ingredient in ingredients"
+          v-for="ingredient in ingredients.slice().reverse()"
           :key="ingredient.id"
         >
           <v-list-item>
@@ -30,7 +30,7 @@
               <v-btn icon>
                 <v-icon
                   @click="deleteIngredient(ingredient.id)"
-                  color="red darken-4"
+                  color="red accent-2"
                   >mdi-delete-forever</v-icon
                 >
               </v-btn>

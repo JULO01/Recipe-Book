@@ -1,6 +1,10 @@
 <template>
   <v-list>
-    <div class="listItem" v-for="recipe in recipes" :key="recipe.id">
+    <div
+      class="listItem"
+      v-for="recipe in recipes.slice().reverse()"
+      :key="recipe.id"
+    >
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title> {{ recipe.name }}</v-list-item-title>
@@ -8,7 +12,7 @@
         <v-list-item-action>
           <v-btn icon>
             <!-- three dots with action to delete or edit -->
-            <v-icon color="red darken-4">mdi-delete-forever</v-icon>
+            <v-icon color="red accent-2">mdi-delete-forever</v-icon>
           </v-btn>
         </v-list-item-action>
       </v-list-item>
