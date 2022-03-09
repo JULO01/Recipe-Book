@@ -23,24 +23,17 @@
         <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>
-    <CompleteRecipe :recipe="randomRecipe"/>
   
   </div>
 </template>
 
 <script>
-// test
-import CompleteRecipe from "..//components/CompleteRecipe.vue"
-
 export default {
   name: "RandomRecipe",
   data() {
     return {
       randomRecipe: Object,
     };
-  },
-  components:{
-    CompleteRecipe,
   },
   methods: {
     getRandomRecipe() {
