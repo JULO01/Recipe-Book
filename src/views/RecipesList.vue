@@ -11,10 +11,24 @@
             <v-list-item-title> {{ recipe.name }}</v-list-item-title>
           </v-list-item-content>
           <v-list-item-action>
-            <v-btn icon>
-              <!-- three dots with action to delete or edit -->
-              <v-icon color="red accent-2">mdi-delete-forever</v-icon>
-            </v-btn>
+            <v-menu
+              bottom
+              origin="center center"
+              transition="scale-transition"
+              rounded="lg"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon v-bind="attrs" v-on="on"> mdi-dots-vertical </v-icon>
+              </template>
+              <v-list>
+                <v-list-item>
+                  <v-list-item-title>{{ "Edit" }}</v-list-item-title>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-title>{{ "Delete" }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </v-list-item-action>
         </v-list-item>
         <v-divider></v-divider>

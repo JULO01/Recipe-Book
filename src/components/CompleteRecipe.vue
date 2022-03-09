@@ -9,18 +9,18 @@
     <v-card-title> Ingredients: </v-card-title>
 
     <v-list>
-        <div
-          v-for="ingredient in recipe.ingredients.slice().reverse()"
-          :key="ingredient.id"
-        >
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title> {{ ingredient.name }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-divider class="mx-4"></v-divider>
-        </div>
-      </v-list>
+      <div
+        v-for="ingredient in recipe.ingredients.slice().reverse()"
+        :key="ingredient.id"
+      >
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title> {{ ingredient.name }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-divider class="mx-4"></v-divider>
+      </div>
+    </v-list>
 
     <v-card-title>Preperation:</v-card-title>
 
@@ -34,7 +34,13 @@
 export default {
   name: "CompleteRecipe",
   props: {
-      recipe: Object,
+    recipe: {
+      id: Number,
+      name: String,
+      ingredients: Array,
+      preperation: String,
+      imageUrl: String,
+    },
   },
   data() {
     return {};

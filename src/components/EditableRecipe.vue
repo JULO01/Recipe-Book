@@ -8,14 +8,14 @@
       ></v-text-field>
 
       <v-text-field
-        @click:append="addIngredient(recipe.ingredient)"
-        @keydown.enter.prevent="addIngredient(recipe.ingredient)"
-        v-model="recipe.ingredient"
+        @click:append="addIngredient(ingredient)"
+        @keydown.enter.prevent="addIngredient(ingredient)"
+        v-model="ingredient"
         label="Ingredients"
         append-icon="mdi-plus"
         ref="ingredientInput"
       ></v-text-field>
-      <!-- v-list is a dummy, it will get dynamic by putting a v-for with this.ingredients in it -->
+
       <v-list>
         <div
           v-for="ingredient in recipe.ingredients.slice().reverse()"
@@ -62,7 +62,7 @@
     </v-form>
 
     <Dialog
-      :text="'Are you sure that you want to leave?'"
+      :text="'Really want to leave?'"
       :acceptButtonText="'Leave'"
       :declineButtonText="'Stay here'"
       :enabled="dialogEnabled"
@@ -73,28 +73,51 @@
 </template>
 
 <script>
+import Dialog from "..//components/Dialog.vue";
+
 export default {
   name: "EditableRecipe",
+  components: {
+    Dialog,
+  },
   props: {
     recipe: {
+      id: Number,
       name: String,
-      ingredient: String,
-      preperation: String,
       ingredients: Array,
-      ingredientId: Number,
-      dialogEnabled: Boolean,
+      preperation: String,
+      imageUrl: String,
     },
   },
+
+  data() {
+    return {
+      ingredient: String,
+      ingredientId: Number,
+      dialogEnabled: Boolean,
+    };
+  },
+
+  created() {
+    //   this.ingredientId has to be length of property ingredients, to prevent duplicate ingredient id's
+    this.ingredient = "";
+    this.ingredientId = this.recipe.ingredients.length;
+    this.dialogEnabled = false;
+  },
+
   methods: {
     addIngredient(ingredientName) {
       if (ingredientName === "") {
         return;
       }
 
-      const ingredientItem = { id: this.recipe.ingredientId, name: ingredientName };
+      const ingredientItem = {
+        id: this.ingredientId,
+        name: ingredientName,
+      };
       this.recipe.ingredients.push(ingredientItem);
-      this.recipe.ingredientId++;
-      this.recipe.ingredient = "";
+      this.ingredientId++;
+      this.ingredient = "";
     },
     deleteIngredient(id) {
       this.recipe.ingredients = this.recipe.ingredients.filter((ingredient) => {
@@ -102,7 +125,7 @@ export default {
       });
     },
     saveRecipe(recipe) {
-      // Push recipe to firebase
+      // Push recipe to firebase and check if there is already a recipe with this id --> then update the existing recipe
       return;
     },
     goBack() {
@@ -114,11 +137,19 @@ export default {
       ) {
         this.$router.push("/");
       } else {
-        console.log("isenabled");
         this.dialogEnabled = true;
-        console.log(this.dialogEnabled);
       }
     },
   },
 };
 </script>
+
+<style scoped>
+.form {
+  padding: 20px;
+}
+
+.buttons {
+  display: flex;
+}
+</style>
