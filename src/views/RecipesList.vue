@@ -6,7 +6,7 @@
         v-for="recipe in recipes.slice().reverse()"
         :key="recipe.id"
       >
-        <v-list-item>
+        <v-list-item @click="showComplete = !showComplete">
           <v-list-item-content>
             <v-list-item-title> {{ recipe.name }}</v-list-item-title>
           </v-list-item-content>
@@ -21,9 +21,25 @@
                 <v-icon v-bind="attrs" v-on="on"> mdi-dots-vertical </v-icon>
               </template>
               <v-list>
+
+                <!-- <v-dialog
+                  v-model="dialog"
+                  fullscreen
+                  hide-overlay
+                  transition="dialog-bottom-transition"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-list-item v-bind="attrs" v-on="on">
+                      <v-list-item-title>{{ "Edit" }}</v-list-item-title>
+                    </v-list-item>
+                  </template>
+                  <EditableRecipe :recipe="recipe"/>
+                </v-dialog> -->
+
                 <v-list-item>
                   <v-list-item-title>{{ "Edit" }}</v-list-item-title>
                 </v-list-item>
+
                 <v-list-item>
                   <v-list-item-title>{{ "Delete" }}</v-list-item-title>
                 </v-list-item>
@@ -31,6 +47,7 @@
             </v-menu>
           </v-list-item-action>
         </v-list-item>
+        <CompleteRecipe :recipe="recipe" v-if="showComplete==true"/>
         <v-divider></v-divider>
       </div>
     </v-list>
@@ -39,13 +56,18 @@
 
 <script>
 // @ is an alias to /src
+import EditableRecipe from "..//components/EditableRecipe.vue"
+import CompleteRecipe from "..//components/CompleteRecipe.vue"
 
 export default {
   name: "RecipesList",
-  components: {},
+  components: {EditableRecipe, CompleteRecipe},
   data() {
     return {
       recipes: Array,
+      // dummy
+      dialog: false,
+      showComplete: false,
     };
   },
   created() {
