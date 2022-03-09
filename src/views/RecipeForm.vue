@@ -18,7 +18,6 @@
       <!-- v-list is a dummy, it will get dynamic by putting a v-for with this.ingredients in it -->
       <v-list>
         <div
-          class="listItem"
           v-for="ingredient in ingredients.slice().reverse()"
           :key="ingredient.id"
         >
@@ -36,7 +35,7 @@
               </v-btn>
             </v-list-item-action>
           </v-list-item>
-          <v-divider></v-divider>
+          <v-divider class="mx-4"></v-divider>
         </div>
       </v-list>
 
