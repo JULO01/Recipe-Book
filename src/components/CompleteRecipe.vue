@@ -4,7 +4,7 @@
 
     <v-divider class="mx-4"></v-divider>
 
-    <v-app-bar>
+    <v-app-bar elevation=1>
       <v-toolbar-title class="text-h6 pl-0">
         {{ recipe.name }}
       </v-toolbar-title>

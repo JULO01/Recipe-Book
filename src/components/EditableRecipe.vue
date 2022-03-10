@@ -155,13 +155,13 @@ export default {
 };
 </script>
 
-<style scoped>
-.form {
-  padding: 20px;
-}
+<style lang="sass" scoped>
+.form
+  padding: 20px
 
-.buttons {
-  display: flex;
-}
+.buttons
+  display: flex
+
+$list-padding: 0px 0px
+
 </style>
-
