@@ -56,18 +56,18 @@
       <div class="buttons">
         <v-spacer></v-spacer>
         <v-btn color="success" class="mr-4"> Save </v-btn>
-        <v-btn @click="goBack()" color="error" class="mr-4"> Back </v-btn>
+        <v-btn @click="goBack(true)" color="error" class="mr-4"> Back </v-btn>
         <v-spacer></v-spacer>
       </div>
     </v-form>
 
     <Dialog
       :text="'Really want to leave?'"
-      :acceptButtonText="'Leave'"
-      :declineButtonText="'Stay here'"
+      :acceptButtonText="'Stay here'"
+      :declineButtonText="'Leave'"
       :enabled="dialogEnabled"
-      @accepted="$router.push('/')"
-      @declined="dialogEnabled = false"
+      @accepted="dialogEnabled = false"
+      @declined="goBack(ckeckInputs = false)"
     />
   </div>
 </template>
@@ -88,6 +88,7 @@ export default {
       preperation: String,
       imageUrl: String,
     },
+    useRouter: Boolean,
   },
 
   data() {
@@ -128,16 +129,26 @@ export default {
       // Push recipe to firebase and check if there is already a recipe with this id --> then update the existing recipe
       return;
     },
-    goBack() {
+    goBack(checkInputs) {
       // Need to bind and check the attached picture in if statement
-      if (
-        this.recipe.ingredients.length == 0 &&
-        this.recipe.name == "" &&
-        this.recipe.preperation == ""
-      ) {
-        this.$router.push("/");
+      if (checkInputs) {
+        if (
+          this.recipe.ingredients.length == 0 &&
+          this.recipe.name == "" &&
+          this.recipe.preperation == ""
+        ) {
+          if (this.useRouter) {
+            this.$router.push("/");
+          }
+          this.$emit("closing");
+        } else {
+          this.dialogEnabled = true;
+        }
       } else {
-        this.dialogEnabled = true;
+          if (this.useRouter) {
+            this.$router.push("/");
+          }
+          this.$emit("closing");
       }
     },
   },
@@ -153,3 +164,4 @@ export default {
   display: flex;
 }
 </style>
+

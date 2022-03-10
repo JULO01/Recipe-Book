@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EditableRecipe :recipe="recipe" />
+    <EditableRecipe :recipe="recipe" :useRouter="true" />
   </div>
 </template>
 

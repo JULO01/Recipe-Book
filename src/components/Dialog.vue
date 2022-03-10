@@ -2,27 +2,19 @@
   <v-dialog v-model="dialogEnabled">
     <v-card>
       <v-card-title class="text-h6">
-        {{text}}
+        {{ text }}
       </v-card-title>
-      <v-card-actions> 
-          <v-spacer></v-spacer>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="green darken-1" text @click="accept">
+          {{ acceptButtonText }}
+        </v-btn>
 
-          <v-btn
-            color="red darken-1"
-            text
-            @click="decline"
-          >
-            {{declineButtonText}}
-          </v-btn>
+        <v-btn color="red darken-1" text @click="decline">
+          {{ declineButtonText }}
+        </v-btn>
 
-          <v-btn
-            color="green darken-1"
-            text
-            @click="accept"
-          >
-            {{acceptButtonText}}
-          </v-btn>
-          <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -37,26 +29,26 @@ export default {
     declineButtonText: String,
     enabled: Boolean,
   },
-  methods:{
-      accept(){
-          this.dialogEnabled = false;
-          this.$emit("accepted");
-      },
-      decline(){
-          this.dialogEnabled = false;
-          this.$emit("declined");
-      }
+  methods: {
+    accept() {
+      this.dialogEnabled = false;
+      this.$emit("accepted");
+    },
+    decline() {
+      this.dialogEnabled = false;
+      this.$emit("declined");
+    },
   },
-  data(){
-      return{
-          dialogEnabled: this.enabled,
-      }
+  data() {
+    return {
+      dialogEnabled: this.enabled,
+    };
   },
-  watch:{
-      enabled: function(newVal, oldVal){
-          this.dialogEnabled = newVal;
-      }
-  }
+  watch: {
+    enabled: function (newVal, oldVal) {
+      this.dialogEnabled = newVal;
+    },
+  },
 };
 </script>
 
