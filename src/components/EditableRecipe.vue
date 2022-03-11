@@ -16,7 +16,7 @@
         ref="ingredientInput"
       ></v-text-field>
 
-      <v-list>
+      <v-list class="mt-n6 mb-2">
         <div
           v-for="ingredient in recipe.ingredients.slice().reverse()"
           :key="ingredient.id"
@@ -67,13 +67,14 @@
       :declineButtonText="'Leave'"
       :enabled="dialogEnabled"
       @accepted="dialogEnabled = false"
-      @declined="goBack(ckeckInputs = false)"
+      @declined="goBack((ckeckInputs = false))"
     />
   </div>
 </template>
 
 <script>
 import Dialog from "..//components/Dialog.vue";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default {
   name: "EditableRecipe",
@@ -96,6 +97,7 @@ export default {
       ingredient: String,
       ingredientId: Number,
       dialogEnabled: Boolean,
+      uid: String,
     };
   },
 
@@ -104,6 +106,7 @@ export default {
     this.ingredient = "";
     this.ingredientId = this.recipe.ingredients.length;
     this.dialogEnabled = false;
+    this.uid = this.uid = getAuth().currentUser.uid;
   },
 
   methods: {
@@ -145,11 +148,23 @@ export default {
           this.dialogEnabled = true;
         }
       } else {
-          if (this.useRouter) {
-            this.$router.push("/");
-          }
-          this.$emit("closing");
+        if (this.useRouter) {
+          this.$router.push("/");
+        }
+        this.$emit("closing");
       }
+    },
+    watchAuthStatus() {
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          this.uid = user.uid;
+          // ...
+        } else {
+          // User is signed out
+          // ...
+        }
+      });
     },
   },
 };
@@ -163,5 +178,4 @@ export default {
   display: flex
 
 $list-padding: 0px 0px
-
 </style>

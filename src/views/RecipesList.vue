@@ -1,6 +1,6 @@
 <template>
   <div>
-    <LoginDialog :enabled="true"/>
+    <LoginDialog :enabled="!isLoggedIn" />
     <CompleteRecipe
       v-if="!completeRecipeHidden"
       :recipe="bufferedRecipe"
@@ -12,7 +12,7 @@
       :recipe="bufferedRecipe"
       @closing="closeEditableRecipe()"
     />
-    <v-list v-if="completeRecipeHidden && editableRecipeHidden">
+    <v-list class="mt-5" v-if="completeRecipeHidden && editableRecipeHidden">
       <div
         class="listItem"
         v-for="recipe in recipes.slice().reverse()"
@@ -37,7 +37,9 @@
 import EditableRecipe from "@/components/EditableRecipe.vue";
 import CompleteRecipe from "@/components/CompleteRecipe.vue";
 import OptionsButton from "@/components/OptionsButton.vue";
-import LoginDialog from "@/components/LoginDialog.vue"
+import LoginDialog from "@/components/LoginDialog.vue";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 
 export default {
   name: "RecipesList",
@@ -49,13 +51,16 @@ export default {
       editableRecipeHidden: Boolean,
       // dummy
       recipes: Array,
-      dialog: false,
+      isLoggedIn: Boolean,
+      uid: String,
     };
   },
   created() {
     this.completeRecipeHidden = true;
     this.editableRecipeHidden = true;
+    this.uid = this.uid = getAuth().currentUser.uid;
     // dummy
+    this.getRecipes()
     this.recipes = [
       {
         id: 1,
@@ -120,6 +125,33 @@ export default {
 
     closeEditableRecipe() {
       this.editableRecipeHidden = true;
+    },
+    watchAuthStatus() {
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          this.uid = user.uid;
+          this.isLoggedIn = true;
+          // ...
+        } else {
+          this.isLoggedIn = false;
+          // User is signed out
+          // ...
+        }
+      });
+    },
+
+    async getRecipes() {
+      const db = getFirestore();
+      const docRef = doc(db, "recipes");
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
     },
   },
 };

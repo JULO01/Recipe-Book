@@ -1,40 +1,48 @@
 <template>
-  <div class="card">
-    <v-card class="mx-auto my-12" max-width="374">
-      <v-img
-        height="250"
-        :src="randomRecipe.imageUrl"
-      ></v-img>
-      <v-card-title>{{randomRecipe.name}}</v-card-title>
+  <div>
+    <LoginDialog :enabled="!isLoggedIn" />
+    <div class="card">
+      <v-card class="mx-auto my-12" max-width="374">
+        <v-img height="250" :src="randomRecipe.imageUrl"></v-img>
+        <v-card-title>{{ randomRecipe.name }}</v-card-title>
 
-      <v-card-text>
-        <v-row align="center" class="mx-0"> </v-row>
+        <v-card-text>
+          <v-row align="center" class="mx-0"> </v-row>
 
-        <!-- <div class="my-4 text-subtitle-1">Italian, Cafe</div> -->
+          <!-- <div class="my-4 text-subtitle-1">Italian, Cafe</div> -->
 
-        <!-- <div>
+          <!-- <div>
           {{randomRecipe.preperation}}
         </div> -->
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="green" text @click="saveRecipe()"> Save </v-btn>
-        <v-btn color="red accent-2" text @click="discardRecipe()"> Discard </v-btn>
-        <v-spacer></v-spacer>
-      </v-card-actions>
-    </v-card>
-  
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green" text @click="saveRecipe()"> Save </v-btn>
+          <v-btn color="red accent-2" text @click="discardRecipe()">
+            Discard
+          </v-btn>
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </div>
   </div>
 </template>
 
 <script>
+import LoginDialog from "@/components/LoginDialog.vue";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+
 export default {
   name: "RandomRecipe",
   data() {
     return {
       randomRecipe: Object,
+      isLoggedIn: Boolean,
+      uid: String,
     };
   },
+  components: { LoginDialog },
   methods: {
     getRandomRecipe() {
       const url = "https://www.themealdb.com/api/json/v1/1/random.php";
@@ -59,7 +67,6 @@ export default {
               const measureIndex = "strMeasure";
 
               for (let i = 1; i <= 20; i++) {
-
                 const ingredientId = i;
                 const ingredientName =
                   apiRecipe[measureIndex + i] +
@@ -68,8 +75,8 @@ export default {
 
                 const ingredient = {
                   id: ingredientId,
-                  name: ingredientName
-                }
+                  name: ingredientName,
+                };
 
                 if (ingredient.name !== " ") {
                   ingredients.push(ingredient);
@@ -77,7 +84,7 @@ export default {
               }
 
               const recipe = {
-                id: id,
+                uid: this.uid,
                 name: name,
                 ingredients: ingredients,
                 preperation: preperation,
@@ -94,17 +101,45 @@ export default {
           console.log(`Error: ${err}`);
         });
     },
-    saveRecipe(){
+    async saveRecipe() {
+      const db = getFirestore();
+      try {
+        const docRef = await addDoc(collection(db, "recipes"), this.randomRecipe);
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
       this.getRandomRecipe();
     },
-    discardRecipe(){
+    discardRecipe() {
       this.getRandomRecipe();
-    }
+    },
+    watchAuthStatus() {
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          this.uid = user.uid;
+          this.isLoggedIn = true;
+          // debug
+          console.log(this.uid);
+        } else {
+          this.isLoggedIn = false;
+          // User is signed out
+          // ...
+        }
+      });
+    },
+    async getCurrentUser(){
+      
+    },
   },
-  created(){
+  created() {
     this.getRandomRecipe();
+    // this.uid = "";
+    this.uid = getAuth().currentUser.uid;
+    this.isLoggedIn = false;
+    this.watchAuthStatus();
   },
-
 };
 </script>
 

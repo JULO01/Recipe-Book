@@ -6,11 +6,12 @@ node_modules
 .firebaserc
 firebase-debug.log
 
-# firestore config
+# firebase config
 firebase.json
 firestore.indexes.json
 firestore.rules
 storage.rules
+firebaseConfig
 
 
 # local env files

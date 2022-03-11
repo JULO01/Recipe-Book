@@ -1,21 +1,27 @@
 <template>
   <v-card>
-    <v-card-title class="text-h5"> {{actionText}} </v-card-title>
+    <v-card-title class="text-h5"> {{ actionText }} </v-card-title>
     <v-card-text>
       <v-form>
         <v-text-field
           v-model="email"
           label="Email"
           required
+          clearable
         ></v-text-field>
         <v-text-field
           v-model="password"
           label="Password"
           required
+          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+          @click:append="showPassword = !showPassword"
+          :type="showPassword ? 'text' : 'password'"
         ></v-text-field>
       </v-form>
     </v-card-text>
-    <v-card-subtitle class="text-center mt-n8 red--text"></v-card-subtitle>
+    <v-card-subtitle class="text-center mt-n8 red--text">{{
+      errorMessage
+    }}</v-card-subtitle>
 
     <v-card-actions>
       <v-spacer></v-spacer>
@@ -23,7 +29,7 @@
         class="mt-n3 mb-5"
         color="primary"
         dark
-        @click="$emit('action-button-clicked')"
+        @click="loginOrRegister(email, password, isRegister)"
       >
         {{ actionText }}
       </v-btn>
@@ -34,7 +40,7 @@
 
     <v-card-subtitle class="text-center">
       {{ subtitleText }}
-      <br/>
+      <br />
       <a @click="$emit('subtitle-link-clicked')">
         {{ subtitleLinkText }}
       </a></v-card-subtitle
@@ -43,22 +49,76 @@
 </template>
 
 <script>
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+
 export default {
   name: "LoginForm",
   props: {
     actionText: String,
     subtitleText: String,
     subtitleLinkText: String,
+    isRegister: Boolean,
   },
   data() {
     return {
       email: String,
       password: String,
+      showPassword: Boolean,
+      errorMessage: String,
     };
   },
   created() {
     this.email = "";
     this.password = "";
+    this.errorMessage = "";
+    this.showPassword = false;
+  },
+  methods: {
+    registerAccount(email, password) {
+      const auth = getAuth();
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          this.errorMessage = "";
+          console.log(user);
+        })
+        .catch((error) => {
+          //   const errorCode = error.code;
+          const errorMessage = error.message;
+          this.errorMessage = errorMessage;
+
+          // ..
+        });
+    },
+    loginAccount(email, password) {
+      const auth = getAuth();
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          this.errorMessage = "";
+          console.log(user);
+          // ...
+        })
+        .catch((error) => {
+          //   const errorCode = error.code;
+          const errorMessage = error.message;
+          this.errorMessage = errorMessage;
+        });
+    },
+    loginOrRegister(email, password, isRegister) {
+      if (isRegister) {
+        this.registerAccount(email, password);
+      } else {
+        this.loginAccount(email, password);
+      }
+    },
   },
 };
 </script>
