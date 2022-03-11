@@ -1,5 +1,6 @@
 <template>
   <div>
+    <LoginDialog :enabled="true"/>
     <CompleteRecipe
       v-if="!completeRecipeHidden"
       :recipe="bufferedRecipe"
@@ -25,7 +26,7 @@
             <OptionsButton @edit-button-clicked="showEditableRecipe(recipe)" />
           </v-list-item-action>
         </v-list-item>
-        <v-divider></v-divider>
+        <v-divider class="mx-4"></v-divider>
       </div>
     </v-list>
   </div>
@@ -36,10 +37,11 @@
 import EditableRecipe from "@/components/EditableRecipe.vue";
 import CompleteRecipe from "@/components/CompleteRecipe.vue";
 import OptionsButton from "@/components/OptionsButton.vue";
+import LoginDialog from "@/components/LoginDialog.vue"
 
 export default {
   name: "RecipesList",
-  components: { EditableRecipe, CompleteRecipe, OptionsButton },
+  components: { EditableRecipe, CompleteRecipe, OptionsButton, LoginDialog },
   data() {
     return {
       bufferedRecipe: Object,
