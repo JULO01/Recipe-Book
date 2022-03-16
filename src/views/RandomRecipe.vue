@@ -1,6 +1,5 @@
 <template>
   <div>
-    <LoginDialog :enabled="!isLoggedIn" />
     <div class="card">
       <v-card class="mx-auto my-12" max-width="374">
         <v-img height="250" :src="randomRecipe.imageUrl"></v-img>
@@ -29,7 +28,6 @@
 </template>
 
 <script>
-import LoginDialog from "@/components/LoginDialog.vue";
 import {mapActions} from "vuex"
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 
@@ -38,11 +36,9 @@ export default {
   data() {
     return {
       randomRecipe: Object,
-      isLoggedIn: Boolean,
-      uid: String,
     };
   },
-  components: { LoginDialog },
+  components: {},
   methods: {
     ...mapActions(["addRecipe"]),
     getRandomRecipe() {
@@ -85,7 +81,6 @@ export default {
               }
 
               const recipe = {
-                uid: this.uid,
                 name: name,
                 ingredients: ingredients,
                 preperation: preperation,
@@ -113,9 +108,7 @@ export default {
   },
   created() {
     this.getRandomRecipe();
-    // dummy
-    this.uid = 1;
-    this.isLoggedIn = true;
+
   },
 };
 </script>

@@ -41,7 +41,7 @@
     <v-card-subtitle class="text-center">
       {{ subtitleText }}
       <br />
-      <a @click="$emit('subtitle-link-clicked')">
+      <a @click="subtitleLinkClicked()">
         {{ subtitleLinkText }}
       </a></v-card-subtitle
     >
@@ -131,6 +131,11 @@ export default {
         this.loginAccount(email, password);
       }
     },
+    subtitleLinkClicked(){
+      this.email = "";
+      this.password = "";
+      this.$emit('subtitle-link-clicked');
+    }
   },
 };
 </script>

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <LoginDialog :enabled="!isLoggedIn" />
     <CompleteRecipe
       v-if="!completeRecipeHidden"
       :recipe="bufferedRecipe"
@@ -37,30 +36,21 @@
 import EditableRecipe from "@/components/EditableRecipe.vue";
 import CompleteRecipe from "@/components/CompleteRecipe.vue";
 import OptionsButton from "@/components/OptionsButton.vue";
-import LoginDialog from "@/components/LoginDialog.vue";
 import { mapActions, mapState } from 'vuex'
 
 export default {
   name: "RecipesList",
-  components: { EditableRecipe, CompleteRecipe, OptionsButton, LoginDialog },
+  components: { EditableRecipe, CompleteRecipe, OptionsButton, },
   data() {
     return {
       bufferedRecipe: Object,
       completeRecipeHidden: Boolean,
       editableRecipeHidden: Boolean,
-      // dummy
-      isLoggedIn: Boolean,
-
     };
   },
   created() {
     this.completeRecipeHidden = true;
     this.editableRecipeHidden = true;
-    this.getOwnRecipes();
-
-    
-    // dummy
-    this.isLoggedIn = true;
   },
   methods: {
     ...mapActions(["getOwnRecipes"]),

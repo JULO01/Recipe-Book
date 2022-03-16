@@ -19,7 +19,7 @@
       <v-spacer></v-spacer>
 
       <router-link :to="'/random-recipe'">
-        <v-icon large>mdi-dice-multiple-outline</v-icon>
+        <v-icon class="mr-2" large>mdi-dice-multiple-outline</v-icon>
       </router-link>
 
       <router-link :to="'/recipe-form'">

@@ -14,7 +14,7 @@ const store = new Vuex.Store({
   state: {
     ownRecipes: [],
     // hardcode
-    isLoggedIn: false,
+    isLoggedIn: true,
     uid: 0,
 
   },
@@ -22,10 +22,10 @@ const store = new Vuex.Store({
     getOwnRecipes(state, recipes) {
       state.ownRecipes = recipes;
     },
-    setUserId(state, uid){
+    setUserId(state, uid) {
       state.uid = uid;
     },
-    setIsLoggedIn(state, isLoggedIn){
+    setIsLoggedIn(state, isLoggedIn) {
       state.isLoggedIn = isLoggedIn;
     }
   },
@@ -47,7 +47,7 @@ const store = new Vuex.Store({
       commit("getOwnRecipes", recipes);
     },
 
-    async addRecipe({ commit }, recipe) {
+    async addRecipe({ commit, dispatch }, recipe) {
       const db = getFirestore();
 
       const recipesRef = collection(db, "recipes");
@@ -64,19 +64,34 @@ const store = new Vuex.Store({
         preperation: recipe.preperation,
         uid: this.state.uid,
       });
+      dispatch("getOwnRecipes");
     },
 
-    async getCurrentUser({ commit }) {
+    async getCurrentUser({ commit, dispatch }) {
       const auth = getAuth();
-      const user = auth.currentUser;
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          commit("setIsLoggedIn", true);
+          commit("setUserId", user.uid);
+          dispatch("getOwnRecipes");
 
-      if (user) {
-        commit("setIsLoggedIn", true);
-        commit("setUserId", user.uid);
-      } else {
-        commit("setIsLoggedIn", false);
-        commit("setUserId", 0);
-      }
+        } else {
+          console.log("No user logged in");
+          commit("setIsLoggedIn", false);
+          commit("setUserId", 0);
+        }
+      })
+
+      // const user = auth.currentUser;
+
+      // if (user) {
+      //   commit("setIsLoggedIn", true);
+      //   commit("setUserId", user.uid);
+      // } else {
+      //   console.log("No user logged in");
+      //   commit("setIsLoggedIn", false);
+      //   commit("setUserId", 0);
+      // }
     }
   },
   modules: {
