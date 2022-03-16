@@ -24,8 +24,8 @@ export default {
         preperation: String,
         ingredients: Array,
       },
+      // has to be written in store
       isLoggedIn: Boolean,
-      uid: String,
     };
   },
   created() {
@@ -34,24 +34,8 @@ export default {
     this.recipe.name = "";
     this.recipe.preperation = "";
     this.recipe.ingredients = [];
-    this.uid = this.uid = getAuth().currentUser.uid;
-    this.watchAuthStatus();
   },
   methods: {
-    watchAuthStatus() {
-      const auth = getAuth();
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          this.uid = user.uid;
-          this.isLoggedIn = true;
-          // ...
-        } else {
-          this.isLoggedIn = false;
-          // User is signed out
-          // ...
-        }
-      });
-    },
   },
 };
 </script>

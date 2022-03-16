@@ -28,17 +28,35 @@
     </v-app-bar>
 
     <v-main>
+      <LoginDialog :enabled="!isLoggedIn" />
       <router-view />
     </v-main>
   </v-app>
 </template>
 
 <script>
+import {mapActions, mapState} from "vuex"
+import LoginDialog from "@/components/LoginDialog.vue";
+
 export default {
   name: "App",
 
   data: () => ({
     //
   }),
+  components: {
+    LoginDialog,
+  },
+  methods: {
+    ...mapActions(["getCurrentUser"]),
+  },
+  computed: {
+    ...mapState([
+      "isLoggedIn",
+    ])
+  },
+  mounted(){
+    this.getCurrentUser();
+  }
 };
 </script>

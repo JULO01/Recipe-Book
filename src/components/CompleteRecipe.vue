@@ -37,7 +37,7 @@
 
     <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn @click="$emit('back-button-clicked')" color="error" class="mr-4"> Back </v-btn>
+        <v-btn @click="$emit('back-button-clicked')" color="error" class="mb-5"> Back </v-btn>
         <v-spacer></v-spacer>
     </v-card-actions>
   </v-card>

@@ -55,8 +55,10 @@
 
       <div class="buttons">
         <v-spacer></v-spacer>
-        <v-btn color="success" class="mr-4"> Save </v-btn>
-        <v-btn @click="goBack(true)" color="error" class="mr-4"> Back </v-btn>
+        <v-btn @click="saveRecipe(recipe)" color="success" class="mr-4">
+          Save
+        </v-btn>
+        <v-btn @click="goBack({checkInputs: true})" color="error" class="mr-4"> Back </v-btn>
         <v-spacer></v-spacer>
       </div>
     </v-form>
@@ -67,14 +69,14 @@
       :declineButtonText="'Leave'"
       :enabled="dialogEnabled"
       @accepted="dialogEnabled = false"
-      @declined="goBack((ckeckInputs = false))"
+      @declined="goBack({checkInputs : false})"
     />
   </div>
 </template>
 
 <script>
 import Dialog from "..//components/Dialog.vue";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { mapActions } from "vuex";
 
 export default {
   name: "EditableRecipe",
@@ -97,7 +99,6 @@ export default {
       ingredient: String,
       ingredientId: Number,
       dialogEnabled: Boolean,
-      uid: String,
     };
   },
 
@@ -106,10 +107,10 @@ export default {
     this.ingredient = "";
     this.ingredientId = this.recipe.ingredients.length;
     this.dialogEnabled = false;
-    this.uid = this.uid = getAuth().currentUser.uid;
   },
 
   methods: {
+    ...mapActions(["addRecipe"]),
     addIngredient(ingredientName) {
       if (ingredientName === "") {
         return;
@@ -130,10 +131,13 @@ export default {
     },
     saveRecipe(recipe) {
       // Push recipe to firebase and check if there is already a recipe with this id --> then update the existing recipe
+      this.addRecipe(recipe);
+      this.goBack({checkInputs: false});
       return;
     },
-    goBack(checkInputs) {
+    goBack({ checkInputs = true } = {}) {
       // Need to bind and check the attached picture in if statement
+      console.log(`Check inputs: ${checkInputs}`);
       if (checkInputs) {
         if (
           this.recipe.ingredients.length == 0 &&
@@ -153,18 +157,6 @@ export default {
         }
         this.$emit("closing");
       }
-    },
-    watchAuthStatus() {
-      const auth = getAuth();
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          this.uid = user.uid;
-          // ...
-        } else {
-          // User is signed out
-          // ...
-        }
-      });
     },
   },
 };

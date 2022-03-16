@@ -30,7 +30,7 @@
 
 <script>
 import LoginDialog from "@/components/LoginDialog.vue";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import {mapActions} from "vuex"
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 
 export default {
@@ -44,6 +44,7 @@ export default {
   },
   components: { LoginDialog },
   methods: {
+    ...mapActions(["addRecipe"]),
     getRandomRecipe() {
       const url = "https://www.themealdb.com/api/json/v1/1/random.php";
       const recipeObservable = fetch(url);
@@ -78,7 +79,7 @@ export default {
                   name: ingredientName,
                 };
 
-                if (ingredient.name !== " ") {
+                if (ingredient.name !== " " && ingredient.name !== "  " && ingredient.name !== "") {
                   ingredients.push(ingredient);
                 }
               }
@@ -101,44 +102,20 @@ export default {
           console.log(`Error: ${err}`);
         });
     },
-    async saveRecipe() {
-      const db = getFirestore();
-      try {
-        const docRef = await addDoc(collection(db, "recipes"), this.randomRecipe);
-        console.log("Document written with ID: ", docRef.id);
-      } catch (e) {
-        console.error("Error adding document: ", e);
-      }
-      this.getRandomRecipe();
+    saveRecipe() {
+      this.addRecipe(this.randomRecipe);
+      this.getRandomRecipe()
     },
     discardRecipe() {
       this.getRandomRecipe();
     },
-    watchAuthStatus() {
-      const auth = getAuth();
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          this.uid = user.uid;
-          this.isLoggedIn = true;
-          // debug
-          console.log(this.uid);
-        } else {
-          this.isLoggedIn = false;
-          // User is signed out
-          // ...
-        }
-      });
-    },
-    async getCurrentUser(){
-      
-    },
+    
   },
   created() {
     this.getRandomRecipe();
-    // this.uid = "";
-    this.uid = getAuth().currentUser.uid;
-    this.isLoggedIn = false;
-    this.watchAuthStatus();
+    // dummy
+    this.uid = 1;
+    this.isLoggedIn = true;
   },
 };
 </script>

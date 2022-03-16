@@ -54,6 +54,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import {mapState, mapActions, mapMutations} from "vuex"
 
 export default {
   name: "LoginForm",
@@ -77,13 +78,21 @@ export default {
     this.errorMessage = "";
     this.showPassword = false;
   },
+  computed: {
+    
+  },
   methods: {
+    ...mapMutations(["setUserId", "setIsLoggedIn"]),
+    ...mapActions(["getOwnRecipes"]),
     registerAccount(email, password) {
       const auth = getAuth();
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
+          this.setUserId(user.uid);
+          this.setIsLoggedIn(true);
+          this.getOwnRecipes();
           this.errorMessage = "";
           console.log(user);
         })
@@ -102,6 +111,9 @@ export default {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
+          this.setUserId(user.uid);
+          this.setIsLoggedIn(true);
+          this.getOwnRecipes();
           this.errorMessage = "";
           console.log(user);
           // ...
