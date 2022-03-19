@@ -4,7 +4,7 @@ import {
   getAuth, onAuthStateChanged, createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { getFirestore, collection, addDoc, query, where, getDocs, doc, setDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, query, where, getDocs, doc, setDoc, updateDoc } from "firebase/firestore";
 
 
 
@@ -50,20 +50,20 @@ const store = new Vuex.Store({
     async addRecipe({ commit, dispatch }, recipe) {
       const db = getFirestore();
 
-      const recipesRef = collection(db, "recipes");
-
       // dummy
       if (!recipe.imageUrl) {
         recipe.imageUrl = "https://www.edeka.de/media/01-rezeptbilder/rezeptbilder-a-d/rez-edeka-burger-the-big-american-rezept-a-d-1-1.jpg"
       }
+      recipe.uid = this.state.uid;
 
-      await setDoc(doc(recipesRef), {
-        imageUrl: recipe.imageUrl,
-        ingredients: recipe.ingredients,
-        name: recipe.name,
-        preperation: recipe.preperation,
-        uid: this.state.uid,
-      });
+      const docRef = await addDoc(collection(db, "recipes"), {});
+
+      recipe.id = docRef.id;
+
+      await updateDoc(docRef, recipe);
+
+      // const docRef = await addDoc(collection(db, "recipes"), recipe);
+
       dispatch("getOwnRecipes");
     },
 
@@ -81,17 +81,6 @@ const store = new Vuex.Store({
           commit("setUserId", 0);
         }
       })
-
-      // const user = auth.currentUser;
-
-      // if (user) {
-      //   commit("setIsLoggedIn", true);
-      //   commit("setUserId", user.uid);
-      // } else {
-      //   console.log("No user logged in");
-      //   commit("setIsLoggedIn", false);
-      //   commit("setUserId", 0);
-      // }
     }
   },
   modules: {
