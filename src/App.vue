@@ -14,7 +14,7 @@
         
       </div>
 
-      <router-link :to="'/'" tag="div" class="v-toolbar__title">Recipe Book</router-link>
+      <router-link :to="'/'" tag="div" class="v-toolbar__title"> Recipe Book </router-link>
 
       <v-spacer></v-spacer>
 

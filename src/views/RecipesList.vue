@@ -4,7 +4,7 @@
       v-if="!completeRecipeHidden"
       :recipe="bufferedRecipe"
       @edit-button-clicked="showEditableRecipe(bufferedRecipe)"
-      @back-button-clicked="completeRecipeHidden = true"
+      @back-button-clicked="(completeRecipeHidden = true), getOwnRecipes()"
     />
     <EditableRecipe
       v-if="!editableRecipeHidden"
@@ -22,7 +22,10 @@
             <v-list-item-title> {{ recipe.name }}</v-list-item-title>
           </v-list-item-content>
           <v-list-item-action>
-            <OptionsButton @edit-button-clicked="showEditableRecipe(recipe)" />
+            <OptionsButton
+              @edit-button-clicked="showEditableRecipe(recipe)"
+              @delete-button-clicked="deleteRecipe(recipe), getOwnRecipes()"
+            />
           </v-list-item-action>
         </v-list-item>
         <v-divider class="mx-4"></v-divider>
@@ -36,11 +39,11 @@
 import EditableRecipe from "@/components/EditableRecipe.vue";
 import CompleteRecipe from "@/components/CompleteRecipe.vue";
 import OptionsButton from "@/components/OptionsButton.vue";
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "RecipesList",
-  components: { EditableRecipe, CompleteRecipe, OptionsButton, },
+  components: { EditableRecipe, CompleteRecipe, OptionsButton },
   data() {
     return {
       bufferedRecipe: Object,
@@ -53,7 +56,7 @@ export default {
     this.editableRecipeHidden = true;
   },
   methods: {
-    ...mapActions(["getOwnRecipes"]),
+    ...mapActions(["getOwnRecipes", "deleteRecipe"]),
 
     showCompleteRecipe(recipe) {
       this.bufferedRecipe = {
@@ -83,12 +86,8 @@ export default {
       this.editableRecipeHidden = true;
     },
   },
-  computed:{
-    ...mapState([
-      "ownRecipes"
-    ])
-      
-    
+  computed: {
+    ...mapState(["ownRecipes"]),
   },
 };
 </script>

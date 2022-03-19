@@ -92,6 +92,7 @@ export default {
       imageUrl: String,
     },
     useRouter: Boolean,
+    recipeExists: Boolean,
   },
 
   data() {

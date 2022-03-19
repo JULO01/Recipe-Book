@@ -23,10 +23,5 @@
 <script>
 export default {
   name: "OptionsButton",
-  props: {
-  },
-  methods: {
-    
-  },
 };
 </script>

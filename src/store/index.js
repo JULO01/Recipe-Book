@@ -4,7 +4,7 @@ import {
   getAuth, onAuthStateChanged, createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { getFirestore, collection, addDoc, query, where, getDocs, doc, setDoc, updateDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, query, where, getDocs, doc, setDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
 
 
@@ -81,8 +81,19 @@ const store = new Vuex.Store({
           commit("setUserId", 0);
         }
       })
+    },
+
+    async deleteRecipe({commit}, recipe){
+      const db = getFirestore();
+      await deleteDoc(doc(db, "recipes", recipe.id));
+    },
+
+    async updateRecipe(recipe){
+      const db = getFirestore();
+      await updateDoc(doc(db, "recipes", recipe.id));
     }
   },
+
   modules: {
   }
 })
