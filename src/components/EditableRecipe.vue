@@ -150,7 +150,6 @@ export default {
     saveRecipe(recipe, image) {
       // Push recipe to firebase and check if there is already a recipe with this id --> then update the existing recipe
       if (this.recipeExists) {
-        console.log(`ID: ${recipe.id}`);
         this.updateRecipe(recipe);
       } else {
         this.addRecipe({ recipe, image });

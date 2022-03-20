@@ -62,7 +62,6 @@ const store = new Vuex.Store({
         const storage = getStorage();
         const storageRef = ref(storage, recipe.id);
         uploadBytes(storageRef, image).then((snapshot) => {
-          console.log(snapshot);
           getDownloadURL(ref(storage, `${recipe.id}`))
           .then((url) =>{
            updateDoc(docRef, {imageUrl: url});
@@ -89,7 +88,6 @@ const store = new Vuex.Store({
           dispatch("getOwnRecipes");
 
         } else {
-          console.log("No user logged in");
           commit("setIsLoggedIn", false);
           commit("setUserId", 0);
         }

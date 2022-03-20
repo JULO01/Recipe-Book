@@ -100,7 +100,6 @@ export default {
     saveRecipe() {
       const recipe = this.randomRecipe;
       const image = undefined;
-      console.log(`Random: ${recipe.name}`)
       this.addRecipe({recipe, image});
       this.getRandomRecipe()
     },

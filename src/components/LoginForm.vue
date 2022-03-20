@@ -94,7 +94,6 @@ export default {
           this.setIsLoggedIn(true);
           this.getOwnRecipes();
           this.errorMessage = "";
-          console.log(user);
         })
         .catch((error) => {
           //   const errorCode = error.code;
@@ -115,8 +114,6 @@ export default {
           this.setIsLoggedIn(true);
           this.getOwnRecipes();
           this.errorMessage = "";
-          console.log(user);
-          // ...
         })
         .catch((error) => {
           //   const errorCode = error.code;
