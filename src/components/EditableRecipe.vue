@@ -54,6 +54,17 @@
         v-model="image"
       ></v-file-input>
 
+      <v-card>
+         <v-card-actions> 
+           <v-btn icon>
+                <v-icon
+                  color="red accent-2"
+                  >mdi-delete-forever</v-icon
+                >
+              </v-btn>
+        </v-card-actions>
+      </v-card>
+
       <div class="buttons">
         <v-spacer></v-spacer>
         <v-btn @click="saveRecipe(recipe, image)" color="success" class="mr-4">
@@ -142,7 +153,7 @@ export default {
         console.log(`ID: ${recipe.id}`);
         this.updateRecipe(recipe);
       } else {
-        this.addRecipe({recipe, image});
+        this.addRecipe({ recipe, image });
       }
 
       this.goBack({ checkInputs: false });
