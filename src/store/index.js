@@ -4,7 +4,9 @@ import {
   getAuth, onAuthStateChanged, createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { getFirestore, collection, addDoc, query, where, getDocs, doc, setDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc, } from "firebase/firestore";
+import { ref, getStorage, uploadBytes } from "firebase/storage";
+
 
 
 
@@ -47,9 +49,9 @@ const store = new Vuex.Store({
       commit("getOwnRecipes", recipes);
     },
 
-    async addRecipe({ commit, dispatch }, recipe) {
+    async addRecipe({ dispatch }, { recipe, image }) {
       const db = getFirestore();
-
+      console.log(recipe);
       // dummy
       if (!recipe.imageUrl) {
         recipe.imageUrl = "https://www.edeka.de/media/01-rezeptbilder/rezeptbilder-a-d/rez-edeka-burger-the-big-american-rezept-a-d-1-1.jpg"
@@ -57,45 +59,57 @@ const store = new Vuex.Store({
       recipe.uid = this.state.uid;
 
       const docRef = await addDoc(collection(db, "recipes"), {});
-
       recipe.id = docRef.id;
-
       await updateDoc(docRef, recipe);
 
-      // const docRef = await addDoc(collection(db, "recipes"), recipe);
+      if (image) {
+        const storage = getStorage();
+        const storageRef = ref(storage, recipe.id);
+        uploadBytes(storageRef, image).then((snapshot) => {
+          console.log('Uploaded image');
+        }).catch(err => console.log(`Failed with ${err}`));
+      };
 
       dispatch("getOwnRecipes");
+
     },
+    // const docRef = await addDoc(collection(db, "recipes"), recipe);
 
-    async getCurrentUser({ commit, dispatch }) {
-      const auth = getAuth();
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          commit("setIsLoggedIn", true);
-          commit("setUserId", user.uid);
-          dispatch("getOwnRecipes");
 
-        } else {
-          console.log("No user logged in");
-          commit("setIsLoggedIn", false);
-          commit("setUserId", 0);
-        }
-      })
-    },
+  
 
-    async deleteRecipe({commit}, recipe){
-      const db = getFirestore();
-      await deleteDoc(doc(db, "recipes", recipe.id));
-    },
+  async getCurrentUser({ commit, dispatch }) {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        commit("setIsLoggedIn", true);
+        commit("setUserId", user.uid);
+        dispatch("getOwnRecipes");
 
-    async updateRecipe(recipe){
-      const db = getFirestore();
-      await updateDoc(doc(db, "recipes", recipe.id));
-    }
+      } else {
+        console.log("No user logged in");
+        commit("setIsLoggedIn", false);
+        commit("setUserId", 0);
+      }
+    })
   },
 
+  async deleteRecipe({ dispatch }, recipe) {
+    const db = getFirestore();
+    await deleteDoc(doc(db, "recipes", recipe.id));
+    dispatch("getOwnRecipes");
+  },
+
+  async updateRecipe({ dispatch }, recipe) {
+    const db = getFirestore();
+    await updateDoc(doc(db, "recipes", recipe.id), recipe);
+    dispatch("getOwnRecipes");
+  },
+
+},
+
   modules: {
-  }
+}
 })
 
 

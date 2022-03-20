@@ -6,8 +6,8 @@ import { initializeApp } from "firebase/app";
 import firebaseConfig from "./firebaseConfig/firebaseConfig"
 import store from './store'
 
-const app = initializeApp(firebaseConfig);
 
+const app = initializeApp(firebaseConfig);
 
 Vue.config.productionTip = false
 
@@ -17,3 +17,4 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+

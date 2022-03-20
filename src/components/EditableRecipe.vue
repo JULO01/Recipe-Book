@@ -51,14 +51,21 @@
         accept="image/*"
         label="Add picture"
         ref="fileInput"
+        v-model="image"
       ></v-file-input>
 
       <div class="buttons">
         <v-spacer></v-spacer>
-        <v-btn @click="saveRecipe(recipe)" color="success" class="mr-4">
+        <v-btn @click="saveRecipe(recipe, image)" color="success" class="mr-4">
           Save
         </v-btn>
-        <v-btn @click="goBack({checkInputs: true})" color="error" class="mr-4"> Back </v-btn>
+        <v-btn
+          @click="goBack({ checkInputs: true })"
+          color="error"
+          class="mr-4"
+        >
+          Back
+        </v-btn>
         <v-spacer></v-spacer>
       </div>
     </v-form>
@@ -69,7 +76,7 @@
       :declineButtonText="'Leave'"
       :enabled="dialogEnabled"
       @accepted="dialogEnabled = false"
-      @declined="goBack({checkInputs : false})"
+      @declined="goBack({ checkInputs: false })"
     />
   </div>
 </template>
@@ -91,7 +98,6 @@ export default {
       preperation: String,
       imageUrl: String,
     },
-    useRouter: Boolean,
     recipeExists: Boolean,
   },
 
@@ -100,18 +106,18 @@ export default {
       ingredient: String,
       ingredientId: Number,
       dialogEnabled: Boolean,
+      image: undefined,
     };
   },
 
   created() {
-    //   this.ingredientId has to be length of property ingredients, to prevent duplicate ingredient id's
     this.ingredient = "";
     this.ingredientId = this.recipe.ingredients.length;
     this.dialogEnabled = false;
   },
 
   methods: {
-    ...mapActions(["addRecipe"]),
+    ...mapActions(["addRecipe", "updateRecipe"]),
     addIngredient(ingredientName) {
       if (ingredientName === "") {
         return;
@@ -130,22 +136,28 @@ export default {
         return ingredient.id !== id;
       });
     },
-    saveRecipe(recipe) {
+    saveRecipe(recipe, image) {
       // Push recipe to firebase and check if there is already a recipe with this id --> then update the existing recipe
-      this.addRecipe(recipe);
-      this.goBack({checkInputs: false});
-      return;
+      if (this.recipeExists) {
+        console.log(`ID: ${recipe.id}`);
+        this.updateRecipe(recipe);
+      } else {
+        this.addRecipe({recipe, image});
+      }
+
+      this.goBack({ checkInputs: false });
     },
+
+    // pushes the router back to the home view (recipesList)
     goBack({ checkInputs = true } = {}) {
       // Need to bind and check the attached picture in if statement
-      console.log(`Check inputs: ${checkInputs}`);
       if (checkInputs) {
         if (
           this.recipe.ingredients.length == 0 &&
           this.recipe.name == "" &&
           this.recipe.preperation == ""
         ) {
-          if (this.useRouter) {
+          if (this.$route.name == "RecipeForm") {
             this.$router.push("/");
           }
           this.$emit("closing");
@@ -153,7 +165,7 @@ export default {
           this.dialogEnabled = true;
         }
       } else {
-        if (this.useRouter) {
+        if (this.$route.name == "RecipeForm") {
           this.$router.push("/");
         }
         this.$emit("closing");

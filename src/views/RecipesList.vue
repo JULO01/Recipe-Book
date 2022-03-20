@@ -4,11 +4,12 @@
       v-if="!completeRecipeHidden"
       :recipe="bufferedRecipe"
       @edit-button-clicked="showEditableRecipe(bufferedRecipe)"
-      @back-button-clicked="(completeRecipeHidden = true), getOwnRecipes()"
+      @back-button-clicked="(completeRecipeHidden = true)"
     />
     <EditableRecipe
       v-if="!editableRecipeHidden"
       :recipe="bufferedRecipe"
+      :recipeExists="true"
       @closing="closeEditableRecipe()"
     />
     <v-list class="mt-8" v-if="completeRecipeHidden && editableRecipeHidden">
@@ -24,7 +25,7 @@
           <v-list-item-action>
             <OptionsButton
               @edit-button-clicked="showEditableRecipe(recipe)"
-              @delete-button-clicked="deleteRecipe(recipe), getOwnRecipes()"
+              @delete-button-clicked="deleteRecipe(recipe)"
             />
           </v-list-item-action>
         </v-list-item>
