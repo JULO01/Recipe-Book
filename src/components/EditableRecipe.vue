@@ -159,6 +159,9 @@ export default {
     this.ingredient = "";
     this.ingredientId = this.recipe.ingredients.length;
     this.dialogEnabled = false;
+    if(this.recipeExists && this.recipe.imageUrl){
+      this.imagePresent = true;      
+    }
   },
 
   methods: {
