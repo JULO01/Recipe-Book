@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { getFirestore, collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc, } from "firebase/firestore";
-import { ref, getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, getStorage, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 
 
 
@@ -29,6 +29,13 @@ const store = new Vuex.Store({
     },
     setIsLoggedIn(state, isLoggedIn) {
       state.isLoggedIn = isLoggedIn;
+    },
+    resetImageUrl(state, recipe) {
+      state.ownRecipes.forEach((element)=>{
+        if(recipe.id == element.id){
+          element.imageUrl = undefined;
+        }
+      })
     }
   },
   actions: {
@@ -51,7 +58,7 @@ const store = new Vuex.Store({
 
     async addRecipe({ dispatch }, { recipe, image }) {
       const db = getFirestore();
-      
+
       recipe.uid = this.state.uid;
 
       const docRef = await addDoc(collection(db, "recipes"), {});
@@ -63,20 +70,30 @@ const store = new Vuex.Store({
         const storageRef = ref(storage, recipe.id);
         uploadBytes(storageRef, image).then((snapshot) => {
           getDownloadURL(ref(storage, `${recipe.id}`))
-          .then((url) =>{
-           updateDoc(docRef, {imageUrl: url});
-           dispatch("getOwnRecipes");
-          })
-          .catch(err => console.log(`Failed with ${err}`));
+            .then((url) => {
+              updateDoc(docRef, { imageUrl: url });
+              dispatch("getOwnRecipes");
+            })
+            .catch(err => console.log(`Failed with ${err}`));
         }).catch(err => console.log(`Failed with ${err}`));
       };
 
       dispatch("getOwnRecipes");
+    },
+
+    async deleteImage({ dispatch, commit }, recipe) {
+      const storage = getStorage();
+      const imageRef = ref(storage, recipe.id);
+
+      // Delete the file
+      deleteObject(imageRef).then(() => {
+        commit("resetImageUrl", recipe)
+        dispatch("getOwnRecipes");
+      }).catch((err) => {
+        console.log(err);
+      });
 
     },
-    // const docRef = await addDoc(collection(db, "recipes"), recipe);
-
-
 
 
     async getCurrentUser({ commit, dispatch }) {

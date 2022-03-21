@@ -15,7 +15,6 @@ export default {
   data() {
     return {
       recipe: {
-        id: Number,
         name: String,
         preperation: String,
         ingredients: Array,

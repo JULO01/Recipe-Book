@@ -50,12 +50,15 @@
         ref="fileInput"
         class="d-none"
         type="file"
-        @change="onFileChanged"
+        accept="image/*"
+        @change="onFileChange"
       />
 
       <v-container>
-        <div v-if="this.recipe.imageUrl == ''">
-          <v-row justify="space-around" >
+        <div
+          v-if="!imagePresent"
+        >
+          <v-row justify="space-around">
             <v-btn
               :loading="isSelecting"
               color="darkgrey"
@@ -66,22 +69,29 @@
             </v-btn>
           </v-row>
           <v-row justify="space-around">
-            <div class="subtitle-1" color="darkgrey">Add Image</div>
+            <div class="subtitle-1 mb-10" color="darkgrey">Add Image</div>
           </v-row>
         </div>
 
-        <v-row justify="space-around">
-          <v-card max-width="200" class="mb-8 mt-5">
-            <v-img :src="recipe.imageUrl">
-              <v-app-bar flat color="rgba(0, 0, 0, 0)">
-                <v-spacer></v-spacer>
-                <v-btn color="white" icon class="mt-n3 mr-n5">
-                  <v-icon size="25">mdi-close</v-icon>
-                </v-btn>
-              </v-app-bar>
-            </v-img>
-          </v-card>
-        </v-row>
+        <div v-if="imagePresent">
+          <v-row justify="space-around">
+            <v-card max-width="200" class="mb-8 mt-5">
+              <v-img :src="recipe.imageUrl">
+                <v-app-bar flat color="rgba(0, 0, 0, 0)">
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="white"
+                    icon
+                    class="mt-n3 mr-n5"
+                    @click="deleteImageButtonClicked(recipe)"
+                  >
+                    <v-icon size="25">mdi-close</v-icon>
+                  </v-btn>
+                </v-app-bar>
+              </v-img>
+            </v-card>
+          </v-row>
+        </div>
 
         <v-row justify="space-around">
           <v-spacer></v-spacer>
@@ -126,7 +136,6 @@ export default {
   },
   props: {
     recipe: {
-      id: Number,
       name: String,
       ingredients: Array,
       preperation: String,
@@ -142,6 +151,7 @@ export default {
       dialogEnabled: Boolean,
       image: undefined,
       isSelecting: false,
+      imagePresent: false,
     };
   },
 
@@ -152,7 +162,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["addRecipe", "updateRecipe"]),
+    ...mapActions(["addRecipe", "updateRecipe", "deleteImage"]),
     addIngredient(ingredientName) {
       if (ingredientName === "") {
         return;
@@ -215,8 +225,25 @@ export default {
       );
       this.$refs.fileInput.click();
     },
-    onFileChanged(e) {
-      this.image = e.target.files[0];
+
+    onFileChange(e) {
+      const image = e.target.files[0];
+      this.recipe.imageUrl = URL.createObjectURL(image);
+      this.image = image;
+      this.imagePresent = true;
+      console.log(this.recipe.imageUrl);
+    },
+
+    deleteImageButtonClicked(recipe) {
+      if (this.recipe.id) {
+        this.deleteImage(recipe);
+        console.log("dsjfdks")
+      }
+      if (this.image) {
+        this.image = undefined;
+      }
+      this.recipe.imageUrl = undefined;
+      this.imagePresent = false;
     },
   },
 };
