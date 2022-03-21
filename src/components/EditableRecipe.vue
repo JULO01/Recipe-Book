@@ -46,39 +46,62 @@
         @keydown.enter.prevent="$refs.fileInput.focus()"
       ></v-textarea>
 
-      <v-file-input
-        truncate-length="15"
-        accept="image/*"
-        label="Add picture"
+      <input
         ref="fileInput"
-        v-model="image"
-      ></v-file-input>
+        class="d-none"
+        type="file"
+        @change="onFileChanged"
+      />
 
-      <v-card>
-         <v-card-actions> 
-           <v-btn icon>
-                <v-icon
-                  color="red accent-2"
-                  >mdi-delete-forever</v-icon
-                >
-              </v-btn>
-        </v-card-actions>
-      </v-card>
+      <v-container>
+        <div v-if="this.recipe.imageUrl == ''">
+          <v-row justify="space-around" >
+            <v-btn
+              :loading="isSelecting"
+              color="darkgrey"
+              icon
+              @click="handleFileInput()"
+            >
+              <v-icon size="40">mdi-plus</v-icon>
+            </v-btn>
+          </v-row>
+          <v-row justify="space-around">
+            <div class="subtitle-1" color="darkgrey">Add Image</div>
+          </v-row>
+        </div>
 
-      <div class="buttons">
-        <v-spacer></v-spacer>
-        <v-btn @click="saveRecipe(recipe, image)" color="success" class="mr-4">
-          Save
-        </v-btn>
-        <v-btn
-          @click="goBack({ checkInputs: true })"
-          color="error"
-          class="mr-4"
-        >
-          Back
-        </v-btn>
-        <v-spacer></v-spacer>
-      </div>
+        <v-row justify="space-around">
+          <v-card max-width="200" class="mb-8 mt-5">
+            <v-img :src="recipe.imageUrl">
+              <v-app-bar flat color="rgba(0, 0, 0, 0)">
+                <v-spacer></v-spacer>
+                <v-btn color="white" icon class="mt-n3 mr-n5">
+                  <v-icon size="25">mdi-close</v-icon>
+                </v-btn>
+              </v-app-bar>
+            </v-img>
+          </v-card>
+        </v-row>
+
+        <v-row justify="space-around">
+          <v-spacer></v-spacer>
+          <v-btn
+            @click="saveRecipe(recipe, image)"
+            color="success"
+            class="mr-2"
+          >
+            Save
+          </v-btn>
+          <v-btn
+            @click="goBack({ checkInputs: true })"
+            color="error"
+            class="ml-2"
+          >
+            Back
+          </v-btn>
+          <v-spacer></v-spacer>
+        </v-row>
+      </v-container>
     </v-form>
 
     <Dialog
@@ -118,6 +141,7 @@ export default {
       ingredientId: Number,
       dialogEnabled: Boolean,
       image: undefined,
+      isSelecting: false,
     };
   },
 
@@ -133,7 +157,6 @@ export default {
       if (ingredientName === "") {
         return;
       }
-
       const ingredientItem = {
         id: this.ingredientId,
         name: ingredientName,
@@ -181,6 +204,20 @@ export default {
         this.$emit("closing");
       }
     },
+    handleFileInput() {
+      this.isSelecting = true;
+      window.addEventListener(
+        "focus",
+        () => {
+          this.isSelecting = false;
+        },
+        { once: true }
+      );
+      this.$refs.fileInput.click();
+    },
+    onFileChanged(e) {
+      this.image = e.target.files[0];
+    },
   },
 };
 </script>
@@ -188,9 +225,6 @@ export default {
 <style lang="sass" scoped>
 .form
   padding: 20px
-
-.buttons
-  display: flex
 
 $list-padding: 0px 0px
 </style>
