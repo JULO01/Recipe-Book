@@ -18,9 +18,18 @@ const store = new Vuex.Store({
     // hardcode
     isLoggedIn: true,
     uid: 0,
+    // Used to hide and show components in the RecipesList view
+    completeRecipeHidden: true,
+    editableRecipeHidden: true,
 
   },
   mutations: {
+    setCompleteRecipeHidden(state, condition){
+      state.completeRecipeHidden = condition;
+    },
+    setEditableRecipeHidden(state, condition){
+      state.editableRecipeHidden = condition;
+    },
     getOwnRecipes(state, recipes) {
       state.ownRecipes = recipes;
     },
@@ -31,8 +40,8 @@ const store = new Vuex.Store({
       state.isLoggedIn = isLoggedIn;
     },
     resetImageUrl(state, recipe) {
-      state.ownRecipes.forEach((element)=>{
-        if(recipe.id == element.id){
+      state.ownRecipes.forEach((element) => {
+        if (recipe.id == element.id) {
           element.imageUrl = undefined;
         }
       })

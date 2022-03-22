@@ -4,7 +4,7 @@
       v-if="!completeRecipeHidden"
       :recipe="bufferedRecipe"
       @edit-button-clicked="showEditableRecipe(bufferedRecipe)"
-      @back-button-clicked="(completeRecipeHidden = true)"
+      @back-button-clicked="(setCompleteRecipeHidden(true))"
     />
     <EditableRecipe
       v-if="!editableRecipeHidden"
@@ -40,7 +40,7 @@
 import EditableRecipe from "@/components/EditableRecipe.vue";
 import CompleteRecipe from "@/components/CompleteRecipe.vue";
 import OptionsButton from "@/components/OptionsButton.vue";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 
 export default {
   name: "RecipesList",
@@ -48,16 +48,11 @@ export default {
   data() {
     return {
       bufferedRecipe: Object,
-      completeRecipeHidden: Boolean,
-      editableRecipeHidden: Boolean,
     };
-  },
-  created() {
-    this.completeRecipeHidden = true;
-    this.editableRecipeHidden = true;
   },
   methods: {
     ...mapActions(["getOwnRecipes", "deleteRecipe"]),
+    ...mapMutations(["setCompleteRecipeHidden", "setEditableRecipeHidden"]),
 
     showCompleteRecipe(recipe) {
       this.bufferedRecipe = {
@@ -67,8 +62,8 @@ export default {
         preperation: recipe.preperation,
         imageUrl: recipe.imageUrl,
       };
-      this.editableRecipeHidden = true;
-      this.completeRecipeHidden = false;
+      this.setEditableRecipeHidden(true);
+      this.setCompleteRecipeHidden(false);
     },
 
     showEditableRecipe(recipe) {
@@ -79,16 +74,16 @@ export default {
         preperation: recipe.preperation,
         imageUrl: recipe.imageUrl,
       };
-      this.completeRecipeHidden = true;
-      this.editableRecipeHidden = false;
+      this.setCompleteRecipeHidden(true);
+      this.setEditableRecipeHidden(false);
     },
 
     closeEditableRecipe() {
-      this.editableRecipeHidden = true;
+      this.setEditableRecipeHidden(true);
     },
   },
   computed: {
-    ...mapState(["ownRecipes"]),
+    ...mapState(["ownRecipes", "completeRecipeHidden", "editableRecipeHidden"]),
   },
 };
 </script>

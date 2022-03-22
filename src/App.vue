@@ -10,32 +10,41 @@
           transition="scale-transition"
           width="40"
         />
-
-        
       </div>
 
-      <router-link :to="'/'" tag="div" class="v-toolbar__title"> Recipe Book </router-link>
+      <router-link :to="'/'" tag="div" class="v-toolbar__title">
+        Recipe Book
+      </router-link>
 
       <v-spacer></v-spacer>
 
-      <router-link :to="'/random-recipe'">
-        <v-icon class="mr-2" large>mdi-dice-multiple-outline</v-icon>
-      </router-link>
-
-      <router-link :to="'/recipe-form'">
-        <v-icon large>mdi-plus</v-icon>
-      </router-link>
     </v-app-bar>
 
     <v-main>
       <LoginDialog :enabled="!isLoggedIn" />
       <router-view />
     </v-main>
+
+    <v-card>
+      <v-footer color="primary" app fixed>
+        <v-tabs height="2.8em" background-color="primary" centered dark icons-and-text>
+          <v-tab to="/">
+            <v-icon color="white" large>mdi-home-outline</v-icon>
+          </v-tab>
+          <v-tab to="/random-recipe">
+            <v-icon color="white" large>mdi-dice-multiple-outline</v-icon>
+          </v-tab>
+          <v-tab to="recipe-form">
+            <v-icon color="white" large>mdi-plus</v-icon>
+          </v-tab>
+        </v-tabs>
+      </v-footer>
+    </v-card>
   </v-app>
 </template>
 
 <script>
-import {mapActions, mapState} from "vuex"
+import { mapActions, mapState } from "vuex";
 import LoginDialog from "@/components/LoginDialog.vue";
 
 export default {
@@ -51,12 +60,15 @@ export default {
     ...mapActions(["getCurrentUser"]),
   },
   computed: {
-    ...mapState([
-      "isLoggedIn",
-    ])
+    ...mapState(["isLoggedIn"]),
   },
-  mounted(){
+  mounted() {
     this.getCurrentUser();
-  }
+  },
 };
 </script>
+
+
+<style lang="sass" scoped>
+$tab-font-size: 4px
+</style>
