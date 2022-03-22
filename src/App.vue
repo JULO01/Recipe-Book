@@ -28,7 +28,7 @@
     <v-card>
       <v-footer color="primary" app fixed>
         <v-tabs height="2.8em" background-color="primary" centered dark icons-and-text>
-          <v-tab to="/">
+          <v-tab to="/" @click="showRecipesList()">
             <v-icon color="white" large>mdi-home-outline</v-icon>
           </v-tab>
           <v-tab to="/random-recipe">
@@ -44,20 +44,22 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 import LoginDialog from "@/components/LoginDialog.vue";
 
 export default {
   name: "App",
 
-  data: () => ({
-    //
-  }),
   components: {
     LoginDialog,
   },
   methods: {
     ...mapActions(["getCurrentUser"]),
+    ...mapMutations(["setCompleteRecipeHidden", "setEditableRecipeHidden"]),
+    showRecipesList(){
+      this.setCompleteRecipeHidden(true);
+      this.setEditableRecipeHidden(true);
+    }
   },
   computed: {
     ...mapState(["isLoggedIn"]),
