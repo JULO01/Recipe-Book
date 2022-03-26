@@ -48,12 +48,12 @@ const store = new Vuex.Store({
     }
   },
   actions: {
-    async getOwnRecipes({ commit }) {
+    async getOwnRecipes({ commit, state }) {
       let recipes = [];
 
       const db = getFirestore();
 
-      const q = query(collection(db, "recipes"), where("uid", "==", this.state.uid));
+      const q = query(collection(db, `users/${state.uid}/recipes`), where("uid", "==", state.uid));
 
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
@@ -65,12 +65,13 @@ const store = new Vuex.Store({
       commit("getOwnRecipes", recipes);
     },
 
-    async addRecipe({ dispatch }, { recipe, image }) {
+    async addRecipe({ dispatch, state }, { recipe, image, }) {
       const db = getFirestore();
 
       recipe.uid = this.state.uid;
 
-      const docRef = await addDoc(collection(db, "recipes"), {});
+      const docRef = await addDoc(collection(db, `users/${state.uid}/recipes`), {});
+      
       recipe.id = docRef.id;
       await updateDoc(docRef, recipe);
 
@@ -120,15 +121,15 @@ const store = new Vuex.Store({
       })
     },
 
-    async deleteRecipe({ dispatch }, recipe) {
+    async deleteRecipe({ dispatch, state }, recipe) {
       const db = getFirestore();
-      await deleteDoc(doc(db, "recipes", recipe.id));
+      await deleteDoc(doc(db, `users/${state.uid}/recipes`, recipe.id));
       dispatch("getOwnRecipes");
     },
 
-    async updateRecipe({ dispatch }, recipe) {
+    async updateRecipe({ dispatch, state }, recipe) {
       const db = getFirestore();
-      await updateDoc(doc(db, "recipes", recipe.id), recipe);
+      await updateDoc(doc(db, `users/${state.uid}/recipes`, recipe.id), recipe);
       dispatch("getOwnRecipes");
     },
 
