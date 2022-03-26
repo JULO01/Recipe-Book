@@ -77,9 +77,9 @@ const store = new Vuex.Store({
 
       if (image) {
         const storage = getStorage();
-        const storageRef = ref(storage, recipe.id);
+        const storageRef = ref(storage, `users/${state.uid}/recipes/${recipe.id}`);
         uploadBytes(storageRef, image).then((snapshot) => {
-          getDownloadURL(ref(storage, `${recipe.id}`))
+          getDownloadURL(storageRef)
             .then((url) => {
               updateDoc(docRef, { imageUrl: url });
               dispatch("getOwnRecipes");
@@ -93,7 +93,7 @@ const store = new Vuex.Store({
 
     async deleteImage({ dispatch, commit }, recipe) {
       const storage = getStorage();
-      const imageRef = ref(storage, recipe.id);
+      const imageRef = ref(storage, `users/${state.uid}/recipes/${recipe.id}`);
 
       // Delete the file
       deleteObject(imageRef).then(() => {
