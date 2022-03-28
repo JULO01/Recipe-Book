@@ -4,7 +4,7 @@
       v-if="!completeRecipeHidden"
       :recipe="bufferedRecipe"
       @edit-button-clicked="showEditableRecipe(bufferedRecipe)"
-      @back-button-clicked="(setCompleteRecipeHidden(true))"
+      @back-button-clicked="setCompleteRecipeHidden(true)"
     />
     <EditableRecipe
       v-if="!editableRecipeHidden"
@@ -12,7 +12,19 @@
       :recipeExists="true"
       @closing="closeEditableRecipe()"
     />
-    <v-list class="mt-8" v-if="completeRecipeHidden && editableRecipeHidden">
+
+    <v-card v-if="ownRecipes.length == 0">
+      <v-card-text>
+        <p class="text-h4 text--primary mt-8">
+          Seems like you don't have any recipes yet...
+        </p>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn to="/random-recipe" text color="teal accent-4"> Browse random recipes </v-btn>
+      </v-card-actions>
+    </v-card>
+
+    <v-list class="mt-8" v-if="completeRecipeHidden && editableRecipeHidden && ownRecipes.length != 0">
       <div
         class="listItem"
         v-for="recipe in ownRecipes.slice().reverse()"
@@ -84,6 +96,6 @@ export default {
   },
   computed: {
     ...mapState(["ownRecipes", "completeRecipeHidden", "editableRecipeHidden"]),
-  },
+  },   
 };
 </script>
