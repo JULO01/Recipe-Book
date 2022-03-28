@@ -13,7 +13,7 @@
         <v-list-item-title>{{ "Edit" }}</v-list-item-title>
       </v-list-item>
 
-      <v-list-item @click.stop="$emit('delete-button-clicked')">
+      <v-list-item class="error--text" @click.stop="$emit('delete-button-clicked')">
         <v-list-item-title>{{ "Delete" }}</v-list-item-title>
       </v-list-item>
     </v-list>

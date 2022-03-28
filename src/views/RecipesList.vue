@@ -13,7 +13,7 @@
       @closing="closeEditableRecipe()"
     />
 
-    <v-card v-if="ownRecipes.length == 0" class="mt-4">
+    <v-card flat v-if="ownRecipes.length == 0" class="mt-4">
       <div class="d-flex flex-column justify-space-between align-center">
         <v-img
           width="180"

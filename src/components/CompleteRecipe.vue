@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto my-12" max-width="374">
+  <v-card class="mx-auto my-12" max-width="374" flat>
     <v-img :src="recipe.imageUrl"></v-img>
 
     <v-divider class="mx-4"></v-divider>
