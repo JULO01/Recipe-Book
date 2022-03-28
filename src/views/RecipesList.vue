@@ -14,15 +14,14 @@
     />
 
     <v-card v-if="ownRecipes.length == 0" class="mt-4">
-      <v-card-content>
-        <div class="d-flex flex-column justify-space-between align-center">
-          <v-img
-            width="180"
-            src="https://firebasestorage.googleapis.com/v0/b/recipe-book-5e2f4.appspot.com/o/assets%2Fempty-state.png?alt=media&token=ae17a028-036b-4fe4-a131-920a69122fb3"
-          >
-          </v-img>
-        </div>
-      </v-card-content>
+      <div class="d-flex flex-column justify-space-between align-center">
+        <v-img
+          width="180"
+          src="https://firebasestorage.googleapis.com/v0/b/recipe-book-5e2f4.appspot.com/o/assets%2Fempty-state.png?alt=media&token=ae17a028-036b-4fe4-a131-920a69122fb3"
+        >
+        </v-img>
+      </div>
+
       <v-card-text>
         <div class="d-flex flex-column justify-space-between align-center">
           <p class="text-h4 text--primary mt-8">
