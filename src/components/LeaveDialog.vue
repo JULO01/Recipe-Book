@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: "Dialog",
+  name: "LeaveDialog",
   props: {
     text: String,
     acceptButtonText: String,

@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center">
     <v-dialog v-model="enabled" persistent max-width="290">
-      <LoginForm
+      <LoginDialogForm
         v-if="isLogin"
         @subtitle-link-clicked="showRegister"
         :actionText="'Login'"
@@ -9,7 +9,7 @@
         :subtitleLinkText="'Register instead.'"
         :isRegister="false"
       />
-      <LoginForm
+      <LoginDialogForm
         v-if="isRegister"
         @subtitle-link-clicked="showLogin"
         :actionText="'Register'"
@@ -22,15 +22,14 @@
 </template>
 
 <script>
-import LoginForm from "@/components/LoginForm.vue";
+import LoginDialogForm from "@/components/LoginDialogForm.vue";
 
 export default {
   name: "LoginDialog",
   components: {
-    LoginForm,
+    LoginDialogForm,
   },
   props: {
-    //   dummy
     enabled: Boolean,
   },
   data() {

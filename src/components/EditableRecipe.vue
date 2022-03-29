@@ -114,7 +114,7 @@
       </v-container>
     </v-form>
 
-    <Dialog
+    <LeaveDialog
       :text="'Really want to leave?'"
       :acceptButtonText="'Stay here'"
       :declineButtonText="'Leave'"
@@ -126,13 +126,13 @@
 </template>
 
 <script>
-import Dialog from "..//components/Dialog.vue";
+import LeaveDialog from "./LeaveDialog.vue";
 import { mapActions } from "vuex";
 
 export default {
   name: "EditableRecipe",
   components: {
-    Dialog,
+    LeaveDialog,
   },
   props: {
     recipe: {

@@ -54,10 +54,10 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import {mapState, mapActions, mapMutations} from "vuex"
+import {mapActions, mapMutations} from "vuex"
 
 export default {
-  name: "LoginForm",
+  name: "LoginDialogForm",
   props: {
     actionText: String,
     subtitleText: String,
@@ -77,9 +77,6 @@ export default {
     this.password = "";
     this.errorMessage = "";
     this.showPassword = false;
-  },
-  computed: {
-    
   },
   methods: {
     ...mapMutations(["setUserId", "setIsLoggedIn"]),
