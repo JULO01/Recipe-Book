@@ -1,4 +1,5 @@
 <template>
+<div>
   <v-menu
     bottom
     origin="center center"
@@ -9,15 +10,16 @@
       <v-icon v-bind="attrs" v-on="on"> mdi-dots-vertical </v-icon>
     </template>
     <v-list>
-      <v-list-item @click.stop="$emit('edit-button-clicked')">
+      <v-list-item @click.stop="$emit('edit-button-clicked')" class="edit">
         <v-list-item-title>{{ "Edit" }}</v-list-item-title>
       </v-list-item>
 
-      <v-list-item class="error--text" @click.stop="$emit('delete-button-clicked')">
+      <v-list-item @click.stop="$emit('delete-button-clicked')" class="error--text delete">
         <v-list-item-title>{{ "Delete" }}</v-list-item-title>
       </v-list-item>
     </v-list>
   </v-menu>
+  </div>
 </template>
 
 <script>
