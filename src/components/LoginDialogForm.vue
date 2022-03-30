@@ -29,7 +29,7 @@
         class="mt-n3 mb-5"
         color="primary"
         dark
-        @click="loginOrRegister(email, password, isRegister)"
+        @click="isRegister ? registerAccount(username, password) : loginAccount(username, password)"
       >
         {{ actionText }}
       </v-btn>
@@ -118,13 +118,7 @@ export default {
           this.errorMessage = errorMessage;
         });
     },
-    loginOrRegister(email, password, isRegister) {
-      if (isRegister) {
-        this.registerAccount(email, password);
-      } else {
-        this.loginAccount(email, password);
-      }
-    },
+   
     subtitleLinkClicked(){
       this.email = "";
       this.password = "";
