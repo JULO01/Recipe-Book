@@ -50,12 +50,10 @@ const store = new Vuex.Store({
   actions: {
     async getOwnRecipes({ commit, state }) {
       let recipes = [];
-
       const db = getFirestore();
-
       const q = query(collection(db, `users/${state.uid}/recipes`), where("uid", "==", state.uid));
-
       const querySnapshot = await getDocs(q);
+
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
         const data = doc.data();
@@ -67,11 +65,9 @@ const store = new Vuex.Store({
 
     async addRecipe({ dispatch, state }, { recipe, image, }) {
       const db = getFirestore();
-
-      recipe.uid = this.state.uid;
-
       const docRef = await addDoc(collection(db, `users/${state.uid}/recipes`), {});
-      
+
+      recipe.uid = state.uid;     
       recipe.id = docRef.id;
       await updateDoc(docRef, recipe);
 
