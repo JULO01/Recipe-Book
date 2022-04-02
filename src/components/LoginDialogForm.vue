@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card rounded="lg">
     <v-card-title class="text-h5"> {{ actionText }} </v-card-title>
     <v-card-text>
       <v-form>
