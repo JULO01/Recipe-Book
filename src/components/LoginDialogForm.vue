@@ -29,7 +29,7 @@
         class="mt-n3 mb-5"
         color="primary"
         dark
-        @click="isRegister ? registerAccount(username, password) : loginAccount(username, password)"
+        @click="isRegister ? registerAccount(email, password) : loginAccount(email, password)"
       >
         {{ actionText }}
       </v-btn>
