@@ -1,3 +1,5 @@
+// This component shows a dialog that asks the user if he wants to leave. Text, Button texts and "hidden"-attribute are properties.
+
 <template>
   <v-dialog v-model="dialogEnabled">
     <v-card>

@@ -1,3 +1,5 @@
+// This component shows a login dialog, that handles both, the login and register proccess.
+
 <template>
   <v-row justify="center">
     <v-dialog v-model="enabled" persistent max-width="290">

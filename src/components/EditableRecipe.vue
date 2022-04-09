@@ -1,3 +1,6 @@
+// This component shows a complete Recipe as in editable mode, so the title, avatar image, description and ingredients can be set and 
+// pushed to firebase
+
 <template>
   <div class="form">
     <v-form ref="form" lazy-validation>

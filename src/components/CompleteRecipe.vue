@@ -1,3 +1,5 @@
+// This component shows a complete recipe as a card, with it's title, avatar, ingredients, and description 
+
 <template>
   <v-card class="mx-auto my-12" max-width="374" flat>
     <v-img :src="recipe.imageUrl"></v-img>

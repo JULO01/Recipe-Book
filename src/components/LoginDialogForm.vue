@@ -1,3 +1,5 @@
+// This component shows the form for the LoginDialog, it's text and store actions can be modified through its props. 
+
 <template>
   <v-card rounded="lg">
     <v-card-title class="text-h5"> {{ actionText }} </v-card-title>

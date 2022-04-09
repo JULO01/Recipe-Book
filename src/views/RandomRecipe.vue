@@ -1,3 +1,6 @@
+// This component shows a random recipe from the randommealsapi as a card. It lets the user discard the random recipe (a new one will be
+// shown) or save the recipe (will be pushed to firebase)
+
 <template>
   <div>
     <div class="card">

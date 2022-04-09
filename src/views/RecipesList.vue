@@ -1,3 +1,7 @@
+// This component renders a list with all the saved recipes of the user. If the user clicks on one of his recipes, the recipe
+// will be shown as a completeRecipe. Every list item has a optionsButton to let the user either delete the recipe or modify it.
+// When modifying, an editableRecipe will render with the values of the selected recipe.
+
 <template>
   <div>
     <CompleteRecipe

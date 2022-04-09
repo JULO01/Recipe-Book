@@ -1,3 +1,5 @@
+// This component shows a edit-button menu, that shows an "Edit" and "Delete" option, when clicked. Both events are emitted, when clicked.
+
 <template>
 <div>
   <v-menu
